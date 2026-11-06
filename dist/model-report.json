@@ -1,0 +1,28 @@
+{
+  "source": "https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset/resolve/635b034f69257814eff850a5c2b3346fe458134f/dataset.csv",
+  "source_sha256": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd",
+  "tracks": 81343,
+  "validation_precision_at_10": {
+    "balanced": 0.10425000000000001,
+    "mood-first": 0.10416666666666669,
+    "texture-first": 0.10383333333333333,
+    "rhythm-first": 0.10658333333333332
+  },
+  "selected": "rhythm-first",
+  "test_genre_overlap_at_10": 0.13216666666666668,
+  "split": "Primary artist SHA256 bucket: 60% reference, 20% validation, 20% test",
+  "evaluation_queries": 1200,
+  "seed": 42,
+  "limitations": [
+    "Genre overlap is a proxy, not listener preference or mood ground truth.",
+    "Historical catalogue; not a live Spotify integration.",
+    "Vocal labels are editorial artist-level hints, not song-level predictions. Unknown collaborations are excluded from vocal filters.",
+    "Valence and energy are proxies for mood.",
+    "No raw audio or listening-history training."
+  ],
+  "library_versions": {
+    "numpy": "2.4.3",
+    "pandas": "3.1.0",
+    "scikit-learn": "1.9.1"
+  }
+}

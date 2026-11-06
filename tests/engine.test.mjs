@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {search,recommend,accepts,mood} from '../dist/engine.js';
+const {tracks,model}=JSON.parse(readFileSync(new URL('../dist/catalog.json',import.meta.url)));
+test('real catalogue is unique and finite',()=>{assert.ok(tracks.length>50000);assert.equal(new Set(tracks.map(t=>t[0])).size,tracks.length);assert.ok(tracks.every(t=>t.slice(8).every(Number.isFinite)));});
+test('search handles artist, accents, punctuation, blank and nonexistent terms',()=>{assert.ok(search(tracks,'Radiohead').length);assert.ok(search(tracks,'Beyonce').length);assert.deepEqual(search(tracks,''),[]);assert.deepEqual(search(tracks,'zzzzznonexistenttrackzzzzz'),[]);});
+test('recommendations exclude source and meet exact constraints',()=>{const seed=search(tracks,'Radiohead')[0];const f={minBpm:60,maxBpm:100,clean:true,otherArtists:true};const r=recommend(tracks,seed,model,f);assert.ok(r.length>0);assert.ok(r.every(x=>x.track[0]!==seed[0]&&x.track[2]!==seed[2]&&accepts(x.track,f)));assert.ok(r.every((x,i)=>!i||x.distance>=r[i-1].distance));assert.equal(new Set(r.map(x=>x.track[1]+'|'+x.track[2])).size,r.length);});
+test('vocal filters exclude unknown and only yield selected labels',()=>{const seed=tracks[0];for(const voice of ['female','male','mixed','instrumental']){const r=recommend(tracks,seed,model,{voice});assert.ok(r.length);assert.ok(r.every(x=>x.track[7]===voice));}});
+test('melancholic and tempo filters actually constrain results',()=>{const f={minBpm:50,maxBpm:90,mood:'Melancholic'};const r=recommend(tracks,tracks[0],model,f);assert.ok(r.length);assert.ok(r.every(x=>mood(x.track)==='Melancholic'&&x.track[8]>=50&&x.track[8]<=90));assert.deepEqual(recommend(tracks,tracks[0],model,{minBpm:240,maxBpm:10}),[]);});

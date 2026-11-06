@@ -1,0 +1,9 @@
+data/tracks.csv
+node_modules/
+artifacts/
+outputs/
+test-results/
+__pycache__/
+*.tar.gz
+.env*
+!.env.example

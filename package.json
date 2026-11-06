@@ -1,0 +1,1 @@
+{"name":"undertone","version":"1.0.0","private":true,"type":"module","scripts":{"dev":"node scripts/serve.mjs","test":"node --test tests/*.test.mjs","train":"python scripts/train.py"},"devDependencies":{"@playwright/test":"^1.65.0"}}

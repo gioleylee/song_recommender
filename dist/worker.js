@@ -1,0 +1,3 @@
+import {search,recommend} from './engine.js';
+let data;
+self.onmessage=async({data:m})=>{try{if(m.type==='load'){const r=await fetch('./catalog.json');if(!r.ok)throw Error('Catalogue could not load.');data=await r.json();postMessage({type:'ready',count:data.tracks.length,genres:[...new Set(data.tracks.flatMap(t=>t[6]))].sort()});}else if(m.type==='search'){postMessage({type:'search',id:m.id,results:search(data.tracks,m.query)});}else if(m.type==='recommend'){postMessage({type:'recommend',id:m.id,results:recommend(data.tracks,m.seed,data.model,m.filters)});}}catch(e){postMessage({type:'error',message:e.message});}};
